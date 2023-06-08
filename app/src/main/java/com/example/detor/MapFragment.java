@@ -1,22 +1,20 @@
 package com.example.detor;
 
-import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
-import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,14 +33,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private Context context;
 
-    private List<LatLng> lockersPos;
+    private List<Block> blockOfLockersPos;
 
-    public MapFragment(Context context){
+
+    public MapFragment(Context context, List<Block> blockOfLockersPos){
         this.context = context;
-        this.lockersPos = new ArrayList<>();
-        lockersPos.add(new LatLng(32.073959, 34.781893));
-        lockersPos.add(new LatLng(32.083959, 34.781893));
-        lockersPos.add(new LatLng(32.073959, 34.791893));
+        this.blockOfLockersPos = blockOfLockersPos;
     }
 
     private GoogleMap googleMap;
@@ -68,12 +64,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.setMaxZoomPreference(16);
         googleMap.setMinZoomPreference(14.5F);
-        for (LatLng latlng : lockersPos) {
-            googleMap.addMarker(new MarkerOptions().position(latlng)
-                    .title("All lockers are full!" )
+        for (Block block : blockOfLockersPos) {
+            String title = block.isFull() ? getString(R.string.all_lockers_are_full): getString(R.string.rent);
+            googleMap.addMarker(new MarkerOptions().position(block.getPos())
+                    .title(title)
                         .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.lock)));
         }
         googleMap.setOnMapClickListener(this);
+        googleMap.setOnInfoWindowClickListener(marker1 -> {
+            switchActivity(SettingsActivity.class);
+        });
     }
 
     private BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {
@@ -109,6 +109,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public void onMapClick(@NonNull LatLng latLng) {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+    }
+
+    public void switchActivity(Class<?> cls){
+        Intent switchActivityIntent = new Intent(context, cls);
+        startActivity(switchActivityIntent);
     }
 
 }

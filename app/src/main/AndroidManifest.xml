@@ -18,6 +18,12 @@
         android:theme="@style/Theme.Detor"
         tools:targetApi="31">
         <activity
+            android:name=".PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AccountActivity"
+            android:exported="false" />
+        <activity
             android:name=".SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings"
@@ -28,7 +34,7 @@
             android:value="AIzaSyB1SfR2aMJYjSOs3D5VyTWy0aGz2oDfzz4" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".MapActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1002668522518",
+    "project_id": "detor-385cf",
+    "storage_bucket": "detor-385cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002668522518:android:69263c837008e6d9ebc937",
+        "android_client_info": {
+          "package_name": "com.example.detor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002668522518-1q5coftpfhcu44v4bcngu0h4battk5u3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFJ7C2Em2Lq0ZMpHgiZuWWJGD14Umg1XM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1002668522518-1q5coftpfhcu44v4bcngu0h4battk5u3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
