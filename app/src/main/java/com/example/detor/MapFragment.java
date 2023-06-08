@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,8 +27,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.widget.SearchView;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
 
@@ -51,8 +55,44 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 .findFragmentById(R.id.MY_MAP);
         supportMapFragment.getMapAsync(this);
 
+        searchQueryHandle(view);
+
         return view;
     }
+
+    private void searchQueryHandle(View view) {
+        SearchView mapSearchView = view.findViewById(R.id.mapSearchView);
+        mapSearchView.setIconified(false);
+        mapSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+            @Override
+            public boolean onQueryTextSubmit(String s){
+                String location = mapSearchView.getQuery().toString();
+                List<android.location.Address> addressList;
+
+                if(location != null){
+                    Geocoder geocoder = new Geocoder(context);
+                    try{
+                        addressList = geocoder.getFromLocationName(location, 1);
+                        android.location.Address address = addressList.get(0);
+                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                    }
+                    catch(Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(context, getString(R.string.no_address), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s){
+                return false;
+            }
+
+        });
+    }
+
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -70,10 +110,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     .title(title)
                         .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.lock)));
         }
-        googleMap.setOnMapClickListener(this);
         googleMap.setOnInfoWindowClickListener(marker1 -> {
-            switchActivity(SettingsActivity.class);
+            if (marker1.getTitle().equals(getString(R.string.rent)))
+                switchActivity(SettingsActivity.class);
         });
+        googleMap.setOnMapClickListener(this);
     }
 
     private BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {

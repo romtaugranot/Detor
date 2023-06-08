@@ -12,4 +12,12 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         />
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/mapSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="#BFBFBF"
+        android:elevation="5dp" />
+
 </FrameLayout>

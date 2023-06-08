@@ -7,6 +7,7 @@
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="all_lockers_are_full">All lockers are full here!</string>
     <string name="rent">Click here to rent a locker!</string>
+    <string name="no_address">No such address!</string>
 
 
 </resources>
