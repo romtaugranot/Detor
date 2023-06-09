@@ -16,7 +16,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,12 +27,47 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     private DatabaseReference database;
 
+    private MapFragment map;
+
+    public Timer timer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
         database = FirebaseDatabase.getInstance().getReference();
+
+        addMapAndBlocksToMap();
+
+        // drawer layout instance to toggle the menu icon to open
+        // drawer and back button to close drawer
+        drawerLayout = findViewById(R.id.my_drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
+
+        // pass the Open and Close toggle for the drawer layout listener
+        // to toggle the button
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+        // to make the Navigation drawer icon always appear on the action bar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        NavigationView mNavigationView = findViewById(R.id.navigation_view);
+
+        if (mNavigationView != null) {
+            mNavigationView.setNavigationItemSelectedListener(this);
+        }
+
+        timer = new Timer(this);
+        if (timer.isUpTimer()) {
+            timer.continueCountUpTimer();
+        } else if (timer.isDownTimer()) {
+            timer.continueCountDownTimer();
+        }
+    }
+
+    private void addMapAndBlocksToMap() {
 
         database.child("blocks").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
@@ -63,31 +97,12 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
                     blocks.add(block);
                 }
 
-                Fragment fragment = new MapFragment(this, blocks);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, fragment).commit();
+                map = new MapFragment(this, blocks);
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, map).commit();
 
             }
         });
 
-        // drawer layout instance to toggle the menu icon to open
-        // drawer and back button to close drawer
-        drawerLayout = findViewById(R.id.my_drawer_layout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-
-        // pass the Open and Close toggle for the drawer layout listener
-        // to toggle the button
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
-
-        // to make the Navigation drawer icon always appear on the action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("DETOR");
-
-        NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-
-        if (mNavigationView != null) {
-            mNavigationView.setNavigationItemSelectedListener(this);
-        }
     }
 
 

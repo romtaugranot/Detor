@@ -1,6 +1,8 @@
 package com.example.detor;
 
-public class Locker {
+import java.io.Serializable;
+
+public class Locker implements Serializable {
 
     private boolean isTaken;
 

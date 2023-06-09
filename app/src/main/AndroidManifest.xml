@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Detor"
         tools:targetApi="31">
         <activity
+            android:name=".RentalActivity"
+            android:exported="false" />
+        <activity
             android:name=".PaymentActivity"
             android:exported="false" />
         <activity

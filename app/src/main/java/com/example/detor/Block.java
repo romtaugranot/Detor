@@ -2,12 +2,15 @@ package com.example.detor;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Block {
+public class Block implements Serializable {
 
-    private com.google.android.gms.maps.model.LatLng pos;
+    double lat;
+
+    double lng;
 
     private List<Locker> lockers;
 
@@ -16,17 +19,19 @@ public class Block {
     private boolean isFull;
 
     public Block(int num, LatLng pos) {
-        this.pos = pos;
+        this.lat = pos.latitude;
+        this.lng = pos.longitude;
         this.lockers = new ArrayList<>();
         this.num = num;
     }
 
     public LatLng getPos() {
-        return pos;
+        return new LatLng(lat, lng);
     }
 
     public void setPos(LatLng pos) {
-        this.pos = pos;
+        this.lat = pos.latitude;
+        this.lng = pos.longitude;
     }
 
     public List<Locker> getLockers() {
@@ -43,6 +48,29 @@ public class Block {
 
     public boolean isFull() {return isFull;}
 
+    /**
+     * @pre: there's an empty locker.
+     * @return
+     */
+    public int getIndexOfFreeLockerAndUpdateBlock() {
+        for (int i = 0; i < lockers.size(); i++){
+            if (!lockers.get(i).isTaken()) {
+                lockers.get(i).setTaken(true);
+                return i;
+            }
+        }
+        return -1; // should never get here.
+    }
+
+    public int getIndexOfFreeLocker() {
+        for (int i = 0; i < lockers.size(); i++){
+            if (!lockers.get(i).isTaken()) {
+                return i;
+            }
+        }
+        return -1; // should never get here.
+    }
+
     public int getNum() {
         return num;
     }
@@ -50,4 +78,15 @@ public class Block {
     public void setNum(int num) {
         this.num = num;
     }
+
+    public int howManyAvailable() {
+        int count = 0;
+        for (Locker locker : lockers){
+            if (!locker.isTaken())
+                count++;
+        }
+        return count + 1;
+    }
+
+
 }

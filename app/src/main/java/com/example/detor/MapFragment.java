@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -35,13 +36,13 @@ import androidx.appcompat.widget.SearchView;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
 
-    private Context context;
+    private MapActivity activity;
 
     private List<Block> blockOfLockersPos;
 
 
-    public MapFragment(Context context, List<Block> blockOfLockersPos){
-        this.context = context;
+    public MapFragment(MapActivity activity, List<Block> blockOfLockersPos){
+        this.activity = activity;
         this.blockOfLockersPos = blockOfLockersPos;
     }
 
@@ -70,7 +71,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 List<android.location.Address> addressList;
 
                 if(location != null){
-                    Geocoder geocoder = new Geocoder(context);
+                    Geocoder geocoder = new Geocoder(activity);
                     try{
                         addressList = geocoder.getFromLocationName(location, 1);
                         android.location.Address address = addressList.get(0);
@@ -79,7 +80,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     }
                     catch(Exception e) {
                         e.printStackTrace();
-                        Toast.makeText(context, getString(R.string.no_address), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, getString(R.string.no_address), Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -108,13 +109,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             String title = block.isFull() ? getString(R.string.all_lockers_are_full): getString(R.string.rent);
             googleMap.addMarker(new MarkerOptions().position(block.getPos())
                     .title(title)
-                        .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.lock)));
+                        .icon(BitmapFromVector(activity.getApplicationContext(), R.drawable.lock)));
         }
         googleMap.setOnInfoWindowClickListener(marker1 -> {
-            if (marker1.getTitle().equals(getString(R.string.rent)))
-                switchActivity(SettingsActivity.class);
+            if (marker1.getTitle().equals(getString(R.string.rent))) {
+                Intent switchActivityIntent = new Intent(activity, RentalActivity.class);
+                Block block = getBlockByPos(blockOfLockersPos, marker1.getPosition());
+                switchActivityIntent.putExtra("block", block);
+                if (activity.timer.isDownTimer() || activity.timer.isUpTimer())
+                    activity.timer.cancel();
+                startActivity(switchActivityIntent);
+            }
         });
         googleMap.setOnMapClickListener(this);
+    }
+
+    private Block getBlockByPos(List<Block> blockOfLockersPos, LatLng position) {
+        for (Block block : blockOfLockersPos){
+            if (block.getPos().equals(position))
+                return block;
+        }
+        return null;
     }
 
     private BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {
@@ -152,9 +167,5 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
     }
 
-    public void switchActivity(Class<?> cls){
-        Intent switchActivityIntent = new Intent(context, cls);
-        startActivity(switchActivityIntent);
-    }
 
 }

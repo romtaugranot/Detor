@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Detor</string>
+    <string name="app_name">DETOR</string>
 
     <!-- to toggle the open close button of the navigation drawer -->
     <string name="nav_open">Open</string>
@@ -8,6 +8,10 @@
     <string name="all_lockers_are_full">All lockers are full here!</string>
     <string name="rent">Click here to rent a locker!</string>
     <string name="no_address">No such address!</string>
+    <string name="lockers_are_available">lockers are available</string>
+    <string name="start_renting">START \nRENTING</string>
+    <string name="stop_renting">STOP \nRENTING</string>
+    <string name="reserve_for_15_min">RESERVE FOR \n15 MIN</string>
 
 
 </resources>
