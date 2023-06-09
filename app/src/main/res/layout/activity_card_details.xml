@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextCardNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Card Number"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editTextCVV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="CVV"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editTextCardholderName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Cardholder Name" />
+
+    <EditText
+        android:id="@+id/editTextID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Cardholder ID" />
+
+    <Button
+        android:id="@+id/buttonSaveCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Card" />
+
+</LinearLayout>
