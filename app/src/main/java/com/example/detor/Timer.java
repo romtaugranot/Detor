@@ -12,7 +12,7 @@ public class Timer {
 
     private static final long DAY = 60 * 60 * 24 * 1000L;
 
-    private static final int FIFTEEN_MINUTES = 10;
+    private static final int FIFTEEN_MINUTES = 900;
 
     private static int DOWN_TIME = FIFTEEN_MINUTES;
 
